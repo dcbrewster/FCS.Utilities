@@ -1,0 +1,13 @@
+
+//  returns the maximum value between two inputs of any comparable type:
+public static T Max<T>(T a, T b) where T : IComparable<T>
+{
+    return (a.CompareTo(b) > 0) ? a : b;
+}
+
+Create Min routine as well.
+
+public static string RemoveWhitespace(string source)
+{
+    return Regex.Replace(source, @"\s", string.Empty);
+}

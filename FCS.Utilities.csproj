@@ -1,0 +1,100 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Authors>Dave Brewster</Authors>
+		<Company>Forest City Software</Company>
+		<Copyright>Copyright © Forest City Software 2018 - 2026</Copyright>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Description>Forest City Software Utility Library</Description>
+		<AssemblyVersion>1.0.3.0</AssemblyVersion>
+		<FileVersion>1.0.3.0</FileVersion>
+		<Version>1.0.3</Version>
+		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression></PackageLicenseExpression>
+		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<PackageProjectUrl>http://forestcitysoftware.com</PackageProjectUrl>
+		<PackageTags>utilities dotnet10 net10 dotnet csharp</PackageTags>
+		<PackageReleaseNotes>Updated to .NET 10 with modern C# patterns, GeneratedRegex, nullable reference types, and latest cryptographic APIs.</PackageReleaseNotes>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<PackageIcon>goby.png</PackageIcon>
+		<LangVersion>default</LangVersion>
+		<ErrorReport>none</ErrorReport>
+		<Title>Forest City Software Utilities</Title>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+		<Optimize>false</Optimize>
+		<PackageVersion>1.0.3</PackageVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows|AnyCPU'">
+	  <DebugType>portable</DebugType>
+	  <IsTrimmable>False</IsTrimmable>
+	  <NoWarn>1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows|AnyCPU'">
+	  <DebugType>portable</DebugType>
+	  <IsTrimmable>False</IsTrimmable>
+	  <NoWarn>1591</NoWarn>
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <Compile Remove="FCS.Utilities.UnitTests\**\*.cs" />
+	  <Compile Remove="AppInfo.cs" />
+	  <Compile Remove="CreateExcelFile.cs" />
+	  <Compile Remove="Properties\Resources.Designer.cs" />
+	  <Compile Remove="Toasty.cs" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Remove="Properties\Resources.resx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="goby.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="License.txt">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CsvHelper" Version="33.1.0" />
+		<PackageReference Include="MailKit" Version="4.18.1" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+		<PackageReference Include="MimeKit" Version="4.18.1" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.12" />
+		<PackageReference Include="System.Data.OleDb" Version="10.0.12" />
+		<PackageReference Include="TaskScheduler" Version="2.12.2" />
+		<PackageReference Include="ZXing.Net" Version="0.16.11" />
+		<PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.16" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+		<Pack>True</Pack>
+		<PackagePath></PackagePath>
+	  </None>
+	</ItemGroup>
+</Project>
