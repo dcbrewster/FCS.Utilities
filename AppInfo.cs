@@ -18,22 +18,6 @@ public static class AppInfo
     /// Return The Path Of The Executable File.
     /// </summary>
     public static string Title => ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
-    //public static string Title
-    //{
-    //    get
-    //    {
-    //        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-
-    //        if(attributes.Length > 0)
-    //        {
-    //            AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-
-    //            if(titleAttribute.Title != "") return titleAttribute.Title;
-    //        }
-
-    //        return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().FullName)!;
-    //    }
-    //}
 
     /// <summary>
     /// Return The Product Of The Executable File.
@@ -52,10 +36,10 @@ public static class AppInfo
 
     public static string CompanyName => ((AssemblyCompanyAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
 
-	/// <summary>
-	/// Return The Name Of The Executable File.
-	/// </summary>
-	public static string ExeName => Process.GetCurrentProcess().ProcessName;
+    /// <summary>
+    /// Return The Name Of The Executable File.
+    /// </summary>
+    public static string ExeName => Process.GetCurrentProcess().ProcessName;
 
     /// <summary>
     /// Return The Path Of The Executable File.

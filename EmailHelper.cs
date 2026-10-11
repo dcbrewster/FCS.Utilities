@@ -626,6 +626,12 @@ public class EmailHelper
         return message;                                                        // Return The Message
     }
 
+    /// <summary>
+    /// Strip HTML tags from the input string and decode HTML entities.
+    /// This is a fallback method for stripping HTML when the input is expected to be in HTML format.
+    /// </summary>
+    /// <param name="value">The input string containing HTML.</param>
+    /// <returns>The plain text string with HTML tags removed and HTML entities decoded.</returns>
     private static string StripHtmlFallback(string value)
     {
         if(string.IsNullOrWhiteSpace(value)) return string.Empty;
@@ -636,8 +642,18 @@ public class EmailHelper
         return WebUtility.HtmlDecode(HtmlTagRegex.Replace(text, string.Empty));
     }
 
+    /// <summary>
+    /// Check if the given string contains any newline characters (CR or LF).
+    /// </summary>
+    /// <param name="value">The string to check for newline characters.</param>
+    /// <returns>True if the string contains any newline characters; otherwise, false.</returns>
     private static bool ContainsNewLine(string value) => value.Contains('\r') || value.Contains('\n');
 
+    /// <summary>
+    /// Sanitize the header value by replacing line endings with a space and trimming whitespace.
+    /// </summary>
+    /// <param name="value">The header value to sanitize.</param>
+    /// <returns>The sanitized header value.</returns>
     private static string SanitizeHeaderValue(string? value) => string.IsNullOrWhiteSpace(value)
         ? string.Empty
         : value.ReplaceLineEndings(" ").Trim();

@@ -829,7 +829,7 @@ public class ErrorHandler
     /// </summary>
     /// <param name="userAgent">The user agent string to check.</param>
     /// <returns>True if the user agent belongs to a known bot/crawler; otherwise, false.</returns>
-    public static bool IsItABot(string? userAgent)
+    private static bool IsItABot(string? userAgent)
     {
         // If the user agent string is null or empty, we can't determine if it's a bot, so we return false by default.
         // This means that if there is no user agent information available, we will treat the request as if it were not from a bot,

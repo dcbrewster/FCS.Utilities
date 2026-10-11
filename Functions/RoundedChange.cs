@@ -11,32 +11,14 @@ public static partial class Function
     /// Round the amount entered to the nearest nickel (5 cents)
     /// </summary>
     /// <param name="change"></param>
-    public static decimal RoundToNickel(this decimal? change)
-    {
-        if (!change.HasValue || change.Value < .01M) return 0;                      // No Change
-
-        decimal value = change.Value;
-        int Dollars = (int)value;                                                   // Calculate Full Dollars
-        int Cents = (int)(value * 100 % 100);                                       // Calculate Cents
-        int Remaining = Cents % 5;                                                  // Calculate Module Of 5
-
-        Cents = Remaining <= 2 ? Cents -= Remaining : Cents += 5 - Remaining;       // Adjust As Required
-
-        return Dollars + (decimal)Cents / 100;                                      // Return Adjusted Amount
-    }
-
-    /// <summary>
-    /// Round the amount entered to the nearest nickel (5 cents)
-    /// </summary>
-    /// <param name="change"></param>
-    public static decimal RoundToNickel(this decimal change) => RoundToNickel((decimal?)change);
+    public static decimal RoundToNickel(this decimal change) => RoundToNearestFiveCents(change);
 
     /// <summary>
     /// Round the amount entered to the nearest nickel (5 cents)
     /// </summary>
     /// <param name="amount">Amount as a string</param>
     /// <returns>Rounded amount as a decimal</returns>
-    public static decimal RoundToNickel(this string amount) => RoundToNickel(Convert.ToDecimal(amount));
+    public static decimal RoundToNickel(this string amount) => RoundToNearestFiveCents(Convert.ToDecimal(amount));
 
     /// <summary>
     /// Calculate the amount of "Change" required to give back to the customer based on the amount charged and the amount tendered.
@@ -48,7 +30,7 @@ public static partial class Function
         decimal chargeValue = charge ?? 0;                                          // Default To 0 If Null
         decimal tenderedValue = tendered ?? 0;                                      // Default To 0 If Null
 
-        if (chargeValue < 0 || tenderedValue < 0) return 0;                         // Make Sure We Have Positive Amounts
+        if(chargeValue < 0 || tenderedValue < 0) return 0;                         // Make Sure We Have Positive Amounts
 
         return (tenderedValue - chargeValue).RoundToNickel();                       // Return Change
     }
@@ -112,11 +94,24 @@ public static partial class Function
     /// <param name="tendered">float</param>
     public static decimal CashChange(decimal charge, float tendered) => CashChange(charge, Convert.ToDecimal(tendered));
 
+    /// <summary>
+    /// Round the amount entered to the nearest nickel (5 cents)
+    /// </summary>
+    /// <param name="amount">The amount to be rounded</param>
+    /// <returns>The amount rounded to the nearest five cents</returns>
+    public static decimal RoundToNearestFiveCents(decimal amount) => Math.Round(amount / 0.05m, MidpointRounding.AwayFromZero) * 0.05m;
+
     #endregion Public Methods
 
     #region Private Properties
-
+    /// <summary>
+    /// Define Number Styles For Parsing, Allowing Currency Symbols
+    /// </summary>
     private const NumberStyles Style = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;  // Define Number Styles For Parsing, Allowing Currency Symbols
+
+    /// <summary>
+    /// Define Culture For Parsing, Using en-US To Ensure Consistent Decimal Separator (.)
+    /// </summary>
     private static readonly CultureInfo Culture = CultureInfo.CreateSpecificCulture("en-US");   // Define Culture For Parsing, Using en-US To Ensure Consistent Decimal Separator (.)
 
     #endregion Private Properties

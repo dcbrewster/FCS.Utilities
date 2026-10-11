@@ -52,8 +52,6 @@
 	
 	<ItemGroup>
 	  <Compile Remove="FCS.Utilities.UnitTests\**\*.cs" />
-	  <Compile Remove="AppInfo.cs" />
-	  <Compile Remove="CreateExcelFile.cs" />
 	  <Compile Remove="Properties\Resources.Designer.cs" />
 	  <Compile Remove="Toasty.cs" />
 	</ItemGroup>
@@ -85,6 +83,7 @@
 		<PackageReference Include="TaskScheduler" Version="2.12.2" />
 		<PackageReference Include="ZXing.Net" Version="0.16.11" />
 		<PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.16" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="2.19.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -23,7 +23,6 @@ public static class CSV
     /// Fetches CSV data from the specified URL and parses it into a list of objects of type T.
     /// </summary>
     /// <typeparam name="T">The type of objects to parse the CSV data into.</typeparam>
-    /// <param name="season">The season for which to fetch the CSV data.</param>
     /// <param name="url">The URL of the CSV data.</param>
     /// <returns>A list of objects of type T parsed from the CSV data.</returns>
     public static async Task<List<T>> GetCsvDataAsync<T>(string url)

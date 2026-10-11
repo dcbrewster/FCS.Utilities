@@ -8,7 +8,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-//using System.Web.Mvc;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -84,6 +83,12 @@ public class CreateExcelFile
 
     #region HELPER_FUNCTIONS
 
+    /// <summary>
+    /// Convert a List<T> to a DataTable, so we can use the same code to export either a DataTable or a List<T> to Excel.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <returns></returns>
     public static DataTable ListToDataTable<T>(List<T> list)
     {
         DataTable dt = new();
@@ -109,6 +114,11 @@ public class CreateExcelFile
         return dt;
     }
 
+    /// <summary>
+    /// Get the underlying type of a nullable type, or return the original type if it's not nullable.
+    /// </summary>
+    /// <param name="t">The type to check for nullability.</param>
+    /// <returns>The underlying type if the input is nullable; otherwise, the original type.</returns>
     private static Type GetNullableType(Type t)
     {
         Type returnType = t;
@@ -119,6 +129,11 @@ public class CreateExcelFile
         return returnType;
     }
 
+    /// <summary>
+    /// Determine if a given type is nullable (string, array, or Nullable<T>).
+    /// </summary>
+    /// <param name="type">The type to check for nullability.</param>
+    /// <returns>True if the type is nullable; otherwise, false.</returns>
     private static bool IsNullableType(Type type)
     {
         return type == typeof(string)
@@ -127,6 +142,12 @@ public class CreateExcelFile
                 && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)));
     }
 
+    /// <summary>
+    /// Create an Excel file from a DataTable and write it to a specified file path.
+    /// </summary>
+    /// <param name="dt">The DataTable containing the data to be written to the Excel file.</param>
+    /// <param name="xlsxFilePath">The file path where the Excel file will be created.</param>
+    /// <returns>True if the Excel file was successfully created; otherwise, false.</returns>
     public static bool CreateExcelDocument(DataTable dt, string xlsxFilePath)
     {
         DataSet ds = new();
@@ -169,6 +190,13 @@ public class CreateExcelFile
         }
     }
 
+    /// <summary>
+    /// Create an Excel file from a List<T> and stream it to the client as a downloadable file in an ASP.NET Core application.
+    /// </summary>
+    /// <typeparam name="T">The type of the objects in the list.</typeparam>
+    /// <param name="list">The list of objects to be written to the Excel file.</param>
+    /// <param name="filename">The name of the Excel file to be created.</param>
+    /// <returns>A FileStreamResult representing the Excel file to be downloaded by the client.</returns>
     public static FileStreamResult StreamExcelDocument<T>(List<T> list, string filename)
     {
         // If you're using ASP.NET Core 2.x+, then this is the function to call !
@@ -188,6 +216,11 @@ public class CreateExcelFile
         return fr;
     }
 
+    /// <summary>
+    /// Create an Excel file, and write it to a Stream (eg MemoryStream).
+    /// </summary>
+    /// <param name="ds">DataSet containing the data to be written to the Excel.</param>
+    /// <param name="spreadsheet">SpreadsheetDocument to write the data to.</param>
     private static void WriteExcelFile(DataSet ds, SpreadsheetDocument spreadsheet)
     {
         // Create the Excel file contents.  This function is used when creating an Excel file either writing
@@ -237,6 +270,10 @@ public class CreateExcelFile
         spreadsheet.WorkbookPart.Workbook.Save();
     }
 
+    /// <summary>
+    /// Generate a Stylesheet for the Excel file, defining fonts, fills, borders, and cell formats.
+    /// </summary>
+    /// <returns>A Stylesheet object representing the styles for the Excel file.</returns>
     private static Stylesheet GenerateStyleSheet()
     {
         // If you want certain Excel cells to have a different Format, color, border, fonts, etc, then you need to define a "CellFormats" records containing
@@ -332,6 +369,12 @@ public class CreateExcelFile
         ); // return
     }
 
+    /// <summary>
+    /// Write the contents of a DataTable to an Excel Worksheet, using OpenXmlWriter to prevent memory issues.
+    /// </summary>
+    /// <param name="dt">DataTable containing the data to be written to the Excel worksheet.</param>
+    /// <param name="worksheetPart">WorksheetPart representing the Excel worksheet to write to.</param>
+    /// <param name="definedNamesCol">DefinedNames collection for the Excel workbook.</param>
     private static void WriteDataTableToExcelWorksheet(DataTable dt, WorksheetPart worksheetPart, DefinedNames definedNamesCol)
     {
         OpenXmlWriter writer = OpenXmlWriter.Create(worksheetPart, Encoding.ASCII);
@@ -464,6 +507,12 @@ public class CreateExcelFile
         writer.Close();
     }
 
+    /// <summary>
+    /// Append a "Header" cell to the Excel file, with some formatting applied (white text on a dark-gray background).
+    /// </summary>
+    /// <param name="cellReference">The reference of the cell (e.g., "A1").</param>
+    /// <param name="cellStringValue">The text value to be displayed in the cell.</param>
+    /// <param name="writer">The OpenXmlWriter used to write to the Excel file.</param>
     private static void AppendHeaderTextCell(string cellReference, string cellStringValue, OpenXmlWriter writer)
     {
         // Add a new "text" Cell to the first row in our Excel worksheet
@@ -500,6 +549,12 @@ public class CreateExcelFile
         });
     }
 
+    /// <summary>
+    /// Append a "date" cell to the Excel file, with the specified DateTime value.
+    /// </summary>
+    /// <param name="cellReference">The reference of the cell (e.g., "A1").</param>
+    /// <param name="dateTimeValue">The DateTime value to be displayed in the cell.</param>
+    /// <param name="writer">The OpenXmlWriter used to write to the Excel file.</param>
     private static void AppendDateCell(string cellReference, DateTime dateTimeValue, OpenXmlWriter writer)
     {
         // Add a new "datetime" Excel Cell to our Row.
@@ -524,6 +579,12 @@ public class CreateExcelFile
         });
     }
 
+    /// <summary>
+    /// Append a "formula" cell to the Excel file, with the specified formula string.
+    /// </summary>
+    /// <param name="cellReference">The reference of the cell (e.g., "A1").</param>
+    /// <param name="cellStringValue">The formula string to be applied to the cell.</param>
+    /// <param name="writer">The OpenXmlWriter used to write to the Excel file.</param>
     private static void AppendFormulaCell(string cellReference, string cellStringValue, OpenXmlWriter writer)
     {
         // Add a new "formula" Excel Cell to our Row
@@ -535,6 +596,13 @@ public class CreateExcelFile
         });
     }
 
+    /// <summary>
+    /// Append a "numeric" cell to the Excel file, with the specified numeric value.
+    /// </summary>
+    /// <param name="cellReference">The reference of the cell (e.g., "A1").</param>
+    /// <param name="cellStringValue">The numeric value to be displayed in the cell.</param>
+    /// <param name="bIncludeDecimalPlaces">Indicates whether to include decimal places in the cell formatting.</param>
+    /// <param name="writer">The OpenXmlWriter used to write to the Excel file.</param>
     private static void AppendNumericCell(string cellReference, string cellStringValue, bool bIncludeDecimalPlaces, OpenXmlWriter writer)
     {
         // Add a new numeric Excel Cell to our Row.
@@ -549,6 +617,11 @@ public class CreateExcelFile
         });
     }
 
+    /// <summary>
+    /// Replace any non-ASCII characters in the input string with an empty string, effectively removing them.
+    /// </summary>
+    /// <param name="txt"></param>
+    /// <returns></returns>
     private static string ReplaceHexadecimalSymbols(string txt)
     {
         // I've often seen cases when a non-ASCII character will slip into the data you're trying to export,
@@ -591,11 +664,8 @@ public class CreateExcelFile
         char secondChar = (char)('A' + secondInt - 1);
         char thirdChar = (char)('A' + thirdInt);
 
-        if(columnIndex < 26)
-            return thirdChar.ToString();
-
-        if(columnIndex < 702)
-            return $"{secondChar}{thirdChar}";
+        if(columnIndex < 26) return thirdChar.ToString();
+        if(columnIndex < 702) return $"{secondChar}{thirdChar}";
 
         return $"{firstChar}{secondChar}{thirdChar}";
     }

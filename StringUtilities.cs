@@ -32,7 +32,7 @@ public static class StringUtilities
     /// <returns>bool True Or False</returns>
     public static bool StringToBoolean(this string trueOrFalse)
     {
-        if (trueOrFalse == null) return false;                                              // Return False If Null
+        if(trueOrFalse == null) return false;                                              // Return False If Null
 
         return (trueOrFalse.ToLower().Trim()) switch
         {
@@ -48,7 +48,7 @@ public static class StringUtilities
     /// <returns>"true" or "false"</returns>
     public static string BooleanToString(this bool trueOrFalse)
     {
-        if (trueOrFalse) return "true";                                                     // Return True
+        if(trueOrFalse) return "true";                                                     // Return True
 
         return "false";                                                                     // Return False As Default
     }
@@ -60,13 +60,13 @@ public static class StringUtilities
     /// <returns>Sanitized String</returns>
     public static string CharsOnly(string? input = null)
     {
-        if (input == null) return "";                                                       // Return Empty String If Null
+        if(input == null) return "";                                                       // Return Empty String If Null
 
         // Use Regular Expression To Pick Up Valid Characters
         Match Matches = Regex.Match(input, "[_0-9A-Za-z]*", RegexOptions.IgnoreCase | RegexOptions.Multiline, TimeSpan.FromSeconds(1));
         string Chars = string.Empty;                                                        // Loop Through Matches And Build Return String
 
-        while (Matches.Success)                                                             // Loop Through Matches And Build Return String
+        while(Matches.Success)                                                             // Loop Through Matches And Build Return String
         {
             Chars += Matches.Value;                                                         // Add Valid Characters To Return String
             Matches = Matches.NextMatch();                                                  // Move To Next Match
@@ -82,13 +82,13 @@ public static class StringUtilities
     /// <returns>Sanitized String</returns>
     public static string LettersOnly(string? input = null)
     {
-        if (input == null) return "";                                                       // Return Empty String If Null
+        if(input == null) return "";                                                       // Return Empty String If Null
 
         // Use Regular Expression To Pick Up Valid Characters
         Match Matches = Regex.Match(input, "[A-Za-z ]*", RegexOptions.IgnoreCase | RegexOptions.Multiline, TimeSpan.FromSeconds(1));
         string Chars = string.Empty;                                                        // Loop Through Matches And Build Return String
 
-        while (Matches.Success)
+        while(Matches.Success)
         {
             Chars += Matches.Value;                                                         // Add Valid Characters To Return String
             Matches = Matches.NextMatch();                                                  // Move To Next Match
@@ -132,13 +132,13 @@ public static class StringUtilities
     /// <returns>Sanitized String</returns>
     public static string? DecimalOnly(string? input = null)
     {
-        if (input == null) return "";                                                       // Return Empty String If Null
+        if(input == null) return "";                                                       // Return Empty String If Null
 
         // Use Regular Expression To Pick Up Valid Characters
         Match Matches = Regex.Match(input, @"[0-9\.\,]*", RegexOptions.IgnoreCase | RegexOptions.Multiline, TimeSpan.FromSeconds(1));
         string Chars = string.Empty;                                                        // Loop Through Matches And Build Return String
 
-        while (Matches.Success)                                                             // Loop Through Matches And Build Return String
+        while(Matches.Success)                                                             // Loop Through Matches And Build Return String
         {
             Chars += Matches.Value;                                                         // Add Valid Characters To Return String
             Matches = Matches.NextMatch();                                                  // Move To Next Match
@@ -154,13 +154,13 @@ public static class StringUtilities
     /// <returns>Decimal Value</returns>
     public static decimal DecimalOnlyAsDecimal(string? input = null)
     {
-        if (input == null) return 0;                                                        // Return 0 If Null
+        if(input == null) return 0;                                                        // Return 0 If Null
 
         // Use Regular Expression To Pick Up Valid Characters
         Match Matches = Regex.Match(input, @"[0-9\.\,]*", RegexOptions.IgnoreCase | RegexOptions.Multiline, TimeSpan.FromSeconds(1));
         string Chars = string.Empty;                                                        // Loop Through Matches And Build Return String
 
-        while (Matches.Success)
+        while(Matches.Success)
         {
             Chars += Matches.Value;                                                         // Add Valid Characters To Return String
             Matches = Matches.NextMatch();                                                  // Move To Next Match
@@ -200,16 +200,17 @@ public static class StringUtilities
     /// <returns></returns>
     public static IDictionary<string, string> GetQueryStringParameters(string queryString)
     {
-        if (queryString.StartsWith('?')) queryString = queryString[1..];                    // Lets chop ofF the first character
+        if(queryString.StartsWith('?')) queryString = queryString[1..];              // Lets chop ofF the first character
 
-        Dictionary<string, string> nameValueTable = new(StringComparer.OrdinalIgnoreCase);  // Results Dictionary
-        string[] nameValuePairs = queryString.Split('&');                                   // Create Value Pairs Array
+        // Results Dictionary
+        Dictionary<string, string> nameValueTable = new(StringComparer.OrdinalIgnoreCase);
+        string[] nameValuePairs = queryString.Split('&');                         // Create Value Pairs Array
 
-        foreach (string pair in nameValuePairs)                                             // Process Each Pair
+        foreach(string pair in nameValuePairs)                                             // Process Each Pair
         {
-            string[] vars = pair.Split('=');                                                // Split Pair Into Strings
+            string[] vars = pair.Split('=');                                      // Split Pair Into Strings
 
-            if (!nameValueTable.ContainsKey(vars[0])) nameValueTable.Add(vars[0], vars[1]); // Add To Dictionary
+            if(!nameValueTable.ContainsKey(vars[0])) nameValueTable.Add(vars[0], vars[1]); // Add To Dictionary
         }
 
         return nameValueTable;                                                              // Return Dictionary
@@ -226,7 +227,7 @@ public static class StringUtilities
         // Use Regular Expression To Pick Up Valid Characters
         Match tvMatch = Regex.Match(txt, @"\d+\.{0,1}\d*", RegexOptions.None, TimeSpan.FromSeconds(1));
 
-        if (tvMatch.Success) return tvMatch.ToString();                                     // Return Valid Characters
+        if(tvMatch.Success) return tvMatch.ToString();                                     // Return Valid Characters
 
         return "";                                                                          // Return Empty String If No Match
     }
@@ -239,7 +240,7 @@ public static class StringUtilities
     public static string ReturnValidSQLInString(string StringIn)
     {
         // Check String Is Not Empty And Does Not Already Contain Apostrophes
-        if ((StringIn.Length > 0)
+        if((StringIn.Length > 0)
             && (!string.Equals(StringIn.Substring(1, 1), "'", StringComparison.OrdinalIgnoreCase)))
             return $"'{StringIn.Replace(",", "','", StringComparison.OrdinalIgnoreCase)}'"; // Delimit the guids with apostrophes
 
@@ -258,7 +259,7 @@ public static class StringUtilities
         byte[] hash = MD5.HashData(inputBytes);                                 // Convert Input String To Byte Array
         StringBuilder sb = new();                                               // Convert byte array to hex string
 
-        for (int i = 0; i < hash.Length; i++)                                   // Process Each Character
+        for(int i = 0; i < hash.Length; i++)                                   // Process Each Character
             sb.AppendFormat(CultureInfo.CurrentCulture, "{0:X2}", hash[i]);     // Add Character To String
 
         return sb.ToString();                                                   // Return Hash
@@ -328,7 +329,7 @@ public static class StringUtilities
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace,
             TimeSpan.FromSeconds(1));
 
-        while (tvFileNameParts.Success)
+        while(tvFileNameParts.Success)
         {
             tvValidFileName += tvFileNameParts.Groups[0].Value;                     // Add Valid Characters To Return String
             tvFileNameParts = tvFileNameParts.NextMatch();                          // Move To Next Match
@@ -351,7 +352,7 @@ public static class StringUtilities
         // Use Regular Expression To Pick Up Valid Characters
         Match tvMatch = Regex.Match(text, tvRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace, TimeSpan.FromSeconds(1));
 
-        if (tvMatch.Success) return tvMatch.Groups["section"].Value;                    // Return Valid Characters
+        if(tvMatch.Success) return tvMatch.Groups["section"].Value;                    // Return Valid Characters
 
         return null;                                                                    // Return Null If No Match
     }
@@ -383,9 +384,9 @@ public static class StringUtilities
         {
             string[] parts = text.Split(' ');           // Split String Into Words
 
-            for (int i = 0; i < number; i++)            // Process Each Word
+            for(int i = 0; i < number; i++)            // Process Each Word
             {
-                if (i <= number) newString += parts[i] + " ";        // Add To String
+                if(i <= number) newString += parts[i] + " ";        // Add To String
             }
         }
         catch
@@ -405,7 +406,7 @@ public static class StringUtilities
     {
         string Result = string.Empty;                   // New String To Build Results In
 
-        for (int i = 0; i < number; i++)                // Process Each Word
+        for(int i = 0; i < number; i++)                // Process Each Word
             Result += text;                             // Add To String
 
         return Result;                                  // Return Results
@@ -465,15 +466,15 @@ public static class StringUtilities
         Random rd = new();                                              // Create Random Number Generator
 
         // If Symbols Are To Be Included Then Add These To The Allowed Characters
-        if (includeSymbols) allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789 !#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        if(includeSymbols) allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789 !#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
-        for (int i = 0; i < passwordLength; i++)                        // Process Each Character To Be Generated
+        for(int i = 0; i < passwordLength; i++)                        // Process Each Character To Be Generated
         {
             chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];   // Add Random Character To Array
         }
 
         // Check That The Password Contains At Least One Digit, One Uppercase Letter And One Lowercase Letter
-        if (chars.Any(char.IsDigit) && chars.Any(char.IsLetter) && chars.Any(char.IsLower) && chars.Any(char.IsUpper)) return new string(chars);
+        if(chars.Any(char.IsDigit) && chars.Any(char.IsLetter) && chars.Any(char.IsLower) && chars.Any(char.IsUpper)) return new string(chars);
 
         return CreatePassword(passwordLength, includeSymbols);          // If Not Then Try Again
     }
@@ -511,7 +512,7 @@ public static class StringUtilities
     /// <returns>The string with spaces inserted at camel case boundaries, or an empty string if <paramref name="str"/> is null.</returns>
     public static string SplitCamelCase(this string str)
     {
-        if (str == null) return "";                                         // Return Empty String If Null
+        if(str == null) return "";                                         // Return Empty String If Null
 
         str = str.Replace("_", "", StringComparison.OrdinalIgnoreCase);     // Remove Underscores
         str = str.Replace(".pdf", "", StringComparison.OrdinalIgnoreCase);  // Remove File Extension
@@ -587,7 +588,7 @@ public static class StringUtilities
         Exception? _innerException = ex.InnerException;                     // Get The Inner Exception (If Any)
         int cnt = 1;                                                        // Loop Through Inner Exceptions And Add Their Messages To The Result String
 
-        while (_innerException != null)                                     // Loop Through Inner Exceptions And Add Their Messages To The Result String
+        while(_innerException != null)                                     // Loop Through Inner Exceptions And Add Their Messages To The Result String
         {
             cnt++;                                                          // Increment Counter
 
@@ -599,7 +600,7 @@ public static class StringUtilities
         string stackTrace = ex.StackTrace ?? string.Empty;                  // Get Stack Trace And Clean It Up By Removing The Web Root And Common Folder Names To Make It Easier To Read
 
         // If Web Root Is Provided Then Remove This From The Stack Trace To Make It Easier To Read
-        if (webRoot != "") stackTrace = stackTrace.Replace(webRoot, "", StringComparison.OrdinalIgnoreCase);
+        if(webRoot != "") stackTrace = stackTrace.Replace(webRoot, "", StringComparison.OrdinalIgnoreCase);
 
         // Remove Common Folder Names To Make Stack Trace Easier To Read
         stackTrace = stackTrace.Replace(".Controllers", "", StringComparison.OrdinalIgnoreCase)
@@ -644,7 +645,7 @@ public static class StringUtilities
     /// <param name="length"></param>
     public static string StripHTML2(string input, int length)
     {
-        if (input == null) return "";                               // Return Empty String If Null
+        if(input == null) return "";                               // Return Empty String If Null
 
         // Use Regular Expressions To Remove HTML Tags And Replace BR Tags With Newlines
         Regex lineBreakRegex = new(@"<(br|BR)\s{0,1}\/{0,1}>", RegexOptions.Multiline | RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
@@ -670,7 +671,7 @@ public static class StringUtilities
 
         // If The Resulting String Is Longer Than The Specified Length Then Truncate It And Replace Newlines With <br /> Tags For Display In HTML,
         // Otherwise Just Replace Newlines With <br /> Tags For Display In HTML
-        if (input.Length > length) return input[..length].Replace(Environment.NewLine, "<br />", StringComparison.OrdinalIgnoreCase);
+        if(input.Length > length) return input[..length].Replace(Environment.NewLine, "<br />", StringComparison.OrdinalIgnoreCase);
 
         // Replace Newlines With <br /> Tags For Display In HTML
         return input.Replace(Environment.NewLine, "<br />", StringComparison.OrdinalIgnoreCase);
@@ -685,7 +686,7 @@ public static class StringUtilities
 
     public static string? DecodeHtml(string input)
     {
-        if (input == null) return null;                                             // Return Null If Input Is Null
+        if(input == null) return null;                                             // Return Null If Input Is Null
 
         return input.Replace("&gt;", ">", StringComparison.OrdinalIgnoreCase)       // Replace &gt; With >
             .Replace("&lt;", "<", StringComparison.OrdinalIgnoreCase)               // Replace &lt; With <
