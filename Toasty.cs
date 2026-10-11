@@ -3,10 +3,12 @@ using System.IO;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace FCS.Utilities;
+/////////////////////////////////////////////////////
+///                                               ///
+/// WARNING: This code is not production ready.   ///
+/// It is provided as a sample for demonstration. ///
+/// ////////////////////////////////////////////////
 
-/// <summary>
-/// Sample To Create Toast Notifications For Desktop Applications
-/// </summary>
 public class Toasty
 {
     /// <summary>
@@ -57,10 +59,10 @@ public class Toasty
     /// <summary>
     /// Remove Messages Belonging To The Supplied Group
     /// </summary>
-    /// <param name="groupName"></param>
+    /// <param name="groupName">The name of the group whose messages should be removed.</param>
     public static void Remove(string groupName)
     {
-        //toast.RemoveGroup(groupName);
+        toast.RemoveGroup(groupName);
     }
 
     /// <summary>

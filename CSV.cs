@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,5 +58,18 @@ public static class CSV
             return [];
 
         }
+    }
+
+    /// <summary>
+    /// Removes or replaces characters that are problematic in CSV format, including newlines and commas, with spaces.
+    /// </summary>
+    /// <param name="input">The string to sanitize for CSV format.</param>
+    /// <returns>A string with newline characters and commas replaced by spaces.</returns>
+    public static string StripCharsForCsv(string input)
+    {
+        return input.Replace("\r\n", " ", StringComparison.OrdinalIgnoreCase)       // Replace Windows-style newlines with space
+            .Replace("\n", " ", StringComparison.OrdinalIgnoreCase)                 // Replace Unix-style newlines with space
+            .Replace("\r", " ", StringComparison.OrdinalIgnoreCase)                 // Replace old Mac-style newlines with space
+            .Replace(",", " ", StringComparison.OrdinalIgnoreCase);                 // Replace commas with space to prevent CSV column issues
     }
 }

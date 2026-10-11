@@ -21,7 +21,7 @@ public static class TypeCasting
     /// <returns>The integer representation of the object, or 0 if the conversion fails.</returns>
     public static int ToInt(object? i)
     {
-        if (i == null) return 0;
+        if(i == null) return 0;
 
         try
         {
@@ -84,7 +84,7 @@ public static class TypeCasting
     /// <returns>A double-precision floating-point number equivalent to the value of the object, or 0.0 if the conversion fails.</returns>
     public static double ToDouble(object? i)
     {
-        if (i == null) return 0.0;
+        if(i == null) return 0.0;
 
         try
         {
@@ -118,7 +118,7 @@ public static class TypeCasting
     /// <returns>A single-precision floating-point number, or 0f if the conversion fails.</returns>
     public static float ToFloat(object? i)
     {
-        if (i == null) return 0f;
+        if(i == null) return 0f;
 
         try
         {
@@ -141,7 +141,7 @@ public static class TypeCasting
     /// <returns>A 64-bit signed integer equivalent to <paramref name="i"/>, or 0 if the conversion fails.</returns>
     public static long ToLong(object? i)
     {
-        if (i == null) return 0;
+        if(i == null) return 0;
 
         try
         {
@@ -164,7 +164,7 @@ public static class TypeCasting
     /// <returns>The decimal representation of the object, or 0.0 if the conversion fails.</returns>
     public static decimal ToDecimal(object? i)
     {
-        if (i == null) return 0.0M;
+        if(i == null) return 0.0M;
 
         try
         {
@@ -199,17 +199,17 @@ public static class TypeCasting
     /// <returns>The unwrapped value for nullable int or decimal, otherwise the original value.</returns>
     public static object? GetValue(object? value)
     {
-        if (value == null) return null;
+        if(value == null) return null;
 
         Type t = value.GetType();
 
-        if (t.IsGenericType)
+        if(t.IsGenericType)
         {
             // Check if the generic type definition is int? or decimal? and return the underlying value
-            if (t.GetGenericTypeDefinition() == typeof(Nullable<>) && t.GetGenericArguments()[0] == typeof(int))
+            if(t.GetGenericTypeDefinition() == typeof(Nullable<>) && t.GetGenericArguments()[0] == typeof(int))
                 return ((int?)value)!.Value;
 
-            if (t.GetGenericTypeDefinition() == typeof(Nullable<>) && t.GetGenericArguments()[0] == typeof(decimal))
+            if(t.GetGenericTypeDefinition() == typeof(Nullable<>) && t.GetGenericArguments()[0] == typeof(decimal))
                 return ((decimal?)value)!.Value;
         }
 
@@ -233,7 +233,7 @@ public static class TypeCasting
     /// converted to a decimal.</returns>
     public static string ToStringDecimal(object? value, string format)
     {
-        if (value == null) return "";
+        if(value == null) return "";
 
         decimal? i = ToNullableDecimal(value.ToString());
         return i?.ToString(format) ?? "";
@@ -273,7 +273,7 @@ public static class TypeCasting
     /// <returns>The boolean representation of the object, or false if the conversion fails.</returns>
     public static bool ToBool(object? i)
     {
-        if (i == null) return false;
+        if(i == null) return false;
 
         try
         {
@@ -292,7 +292,7 @@ public static class TypeCasting
     /// <returns>null if the input is null; false if the conversion fails; otherwise, the parsed boolean value.</returns>
     public static bool? ToNullableBool(object? i)
     {
-        if (i == null) return null;
+        if(i == null) return null;
 
         try
         {
@@ -314,10 +314,10 @@ public static class TypeCasting
     /// <returns><c>true</c> for values representing true; otherwise, <c>false</c>.</returns>
     public static bool ToBoolFromString(object? i)
     {
-        if (i == null) return false;
+        if(i == null) return false;
 
         string? temp = i.ToString();
-        if (string.IsNullOrEmpty(temp)) return false;
+        if(string.IsNullOrEmpty(temp)) return false;
 
         try
         {
@@ -384,7 +384,7 @@ public static class TypeCasting
     /// <returns>The string representation of the object, or <paramref name="ifBlankValue"/> if blank.</returns>
     public static string ToStringOrDefault(object? i, string ifBlankValue)
     {
-        if (i == null) return ifBlankValue;
+        if(i == null) return ifBlankValue;
 
         string? result = i.ToString();
         return string.IsNullOrWhiteSpace(result) ? ifBlankValue : result;
@@ -399,7 +399,7 @@ public static class TypeCasting
     /// otherwise, an empty string. Returns an empty string if <paramref name="i"/> is null.</returns>
     public static string ToString(object? i, int maxStringLength)
     {
-        if (i == null) return "";
+        if(i == null) return "";
 
         string result = i.ToString() ?? "";
         return result.Length < maxStringLength ? result : "";
@@ -415,16 +415,13 @@ public static class TypeCasting
     /// string if the object is null.</returns>
     public static string ToString(object? i, int subStringStart, int maxStringLength)
     {
-        if (i == null) return "";
+        if(i == null) return string.Empty;
 
-        string result = i.ToString() ?? "";
-        if (string.IsNullOrEmpty(result)) return "";
+        string result = i.ToString() ?? string.Empty;
 
-        if (result.Length > subStringStart)
-            result = result[subStringStart..];
-
-        if (result.Length > maxStringLength)
-            result = result[..maxStringLength];
+        if(string.IsNullOrEmpty(result)) return string.Empty;
+        if(result.Length > subStringStart) result = result[subStringStart..];
+        if(result.Length > maxStringLength) result = result[..maxStringLength];
 
         return result;
     }
@@ -455,7 +452,7 @@ public static class TypeCasting
     /// if the conversion fails.</returns>
     public static DateTime ToDateTime(object? dateTime)
     {
-        if (dateTime == null) return DateTime.MinValue;
+        if(dateTime == null) return DateTime.MinValue;
 
         return DateTime.TryParse(dateTime.ToString(), out DateTime result)
             ? result
@@ -470,7 +467,7 @@ public static class TypeCasting
     /// <returns>The parsed DateTime value, or <see cref="DateTime.MinValue"/> if the object is null or parsing fails.</returns>
     public static DateTime ToDateTime(object? dateTime, string format)
     {
-        if (dateTime == null) return DateTime.MinValue;
+        if(dateTime == null) return DateTime.MinValue;
 
         return DateTime.TryParseExact(dateTime.ToString(), format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result)
             ? result
@@ -484,7 +481,7 @@ public static class TypeCasting
     /// <returns>The parsed DateTime if successful; otherwise, null.</returns>
     public static DateTime? ToNullableDateTime(object? dateTime)
     {
-        if (dateTime == null) return null;
+        if(dateTime == null) return null;
 
         return DateTime.TryParse(dateTime.ToString(), out DateTime result)
             ? result
@@ -498,7 +495,7 @@ public static class TypeCasting
     /// <returns>The parsed TimeSpan value, or null if the object is null or cannot be parsed.</returns>
     public static TimeSpan? ToNullableTimeSpan(object? timeSpan)
     {
-        if (timeSpan == null) return null;
+        if(timeSpan == null) return null;
 
         return TimeSpan.TryParse(timeSpan.ToString(), out TimeSpan result)
             ? result
@@ -514,7 +511,7 @@ public static class TypeCasting
     /// name="dateTime"/> is <see langword="null"/> or parsing fails.</returns>
     public static DateTime? ToNullableDateTime(object? dateTime, string format)
     {
-        if (dateTime == null) return null;
+        if(dateTime == null) return null;
 
         return DateTime.TryParseExact(dateTime.ToString(), format, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime result)
             ? result
@@ -530,6 +527,7 @@ public static class TypeCasting
     public static string ToStringDateTime(object? value, string format)
     {
         DateTime? dateTime = ToNullableDateTime(value);
+
         return dateTime?.ToString(format) ?? "";
     }
 
@@ -564,7 +562,7 @@ public static class TypeCasting
     /// if the conversion fails.</returns>
     public static Guid ToGuid(object? i)
     {
-        if (i == null) return Guid.Empty;
+        if(i == null) return Guid.Empty;
 
         try
         {
@@ -583,7 +581,7 @@ public static class TypeCasting
     /// <returns>A nullable Guid if the conversion succeeds; otherwise, null.</returns>
     public static Guid? ToNullableGuid(object? i)
     {
-        if (i == null) return null;
+        if(i == null) return null;
 
         try
         {
@@ -606,7 +604,7 @@ public static class TypeCasting
     /// <returns>A TimeSpan that represents the time interval, or null if the conversion failed.</returns>
     public static TimeSpan? ToTimeSpan(string? timespan)
     {
-        if (string.IsNullOrEmpty(timespan)) return null;
+        if(string.IsNullOrEmpty(timespan)) return null;
 
         return TimeSpan.TryParse(timespan, out TimeSpan result)
             ? result

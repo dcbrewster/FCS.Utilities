@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FCS.Utilities;
 
@@ -97,27 +98,6 @@ public static class StringUtilities
         return Chars;                                                                       // Return Valid Characters
     }
 
-    ///// <summary>
-    ///// Sanitize string so that only numbers 0-9 are returned.
-    ///// </summary>
-    ///// <param name="input">String To Sanitize</param>
-    ///// <returns>Sanitized String</returns>
-    //public static string NumbersOnly(string input = null)
-    //{
-    //    if(input == null) return "";
-
-    //    Match Matches = Regex.Match(input, "[0-9]*", RegexOptions.IgnoreCase | RegexOptions.Multiline, TimeSpan.FromSeconds(1));
-    //    string Chars = string.empty;
-
-    //    while(Matches.Success)
-    //    {
-    //        Chars += Matches.Value;
-    //        Matches = Matches.NextMatch();
-    //    }
-
-    //    return Chars;
-    //}
-
     /// <summary>
     /// Sanitize string so that only numbers 0-9 are returned.
     /// </summary>
@@ -196,8 +176,8 @@ public static class StringUtilities
     /// <summary>
     /// Retrieve QueryString Variables
     /// </summary>
-    /// <param name="queryString"></param>
-    /// <returns></returns>
+    /// <param name="queryString">The query string to parse</param>
+    /// <returns>A dictionary of query string parameters</returns>
     public static IDictionary<string, string> GetQueryStringParameters(string queryString)
     {
         if(queryString.StartsWith('?')) queryString = queryString[1..];              // Lets chop ofF the first character
@@ -462,21 +442,20 @@ public static class StringUtilities
     public static string CreatePassword(int passwordLength, bool includeSymbols = false)
     {
         string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789"; //!@$?_-
-        char[] chars = new char[passwordLength];                        // Create Character Array To Hold Result
-        Random rd = new();                                              // Create Random Number Generator
+        char[] chars = new char[passwordLength];                                 // Create Character Array To Hold Result
+        Random rd = new();                                                  // Create Random Number Generator
 
         // If Symbols Are To Be Included Then Add These To The Allowed Characters
-        if(includeSymbols) allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789 !#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        if(includeSymbols)
+            allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789 !#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
-        for(int i = 0; i < passwordLength; i++)                        // Process Each Character To Be Generated
-        {
+        for(int i = 0; i < passwordLength; i++)                                 // Process Each Character To Be Generated
             chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];   // Add Random Character To Array
-        }
 
         // Check That The Password Contains At Least One Digit, One Uppercase Letter And One Lowercase Letter
         if(chars.Any(char.IsDigit) && chars.Any(char.IsLetter) && chars.Any(char.IsLower) && chars.Any(char.IsUpper)) return new string(chars);
 
-        return CreatePassword(passwordLength, includeSymbols);          // If Not Then Try Again
+        return CreatePassword(passwordLength, includeSymbols);                  // If Not Then Try Again
     }
 
     /// <summary>
@@ -494,8 +473,8 @@ public static class StringUtilities
     /// <summary>
     /// To Decrypt password
     /// </summary>
-    /// <param name="encryptedPassword"></param>
-    /// <returns>It returns plain password</returns>
+    /// <param name="encryptedPassword">The encrypted password to decrypt.</param>
+    /// <returns>The decrypted plain password.</returns>
     public static string DecryptPassword(string encryptedPassword)
     {
         byte[] passByteData = Convert.FromBase64String(encryptedPassword);  // Convert Base64 String To Byte Array
@@ -512,7 +491,7 @@ public static class StringUtilities
     /// <returns>The string with spaces inserted at camel case boundaries, or an empty string if <paramref name="str"/> is null.</returns>
     public static string SplitCamelCase(this string str)
     {
-        if(str == null) return "";                                         // Return Empty String If Null
+        if(str == null) return "";                                                          // Return Empty String If Null
 
         str = str.Replace("_", "", StringComparison.OrdinalIgnoreCase);     // Remove Underscores
         str = str.Replace(".pdf", "", StringComparison.OrdinalIgnoreCase);  // Remove File Extension
@@ -577,11 +556,12 @@ public static class StringUtilities
     }
 
     /// <summary>
-    /// Returns a string containing the messages of the provided exception and all inner exceptions, along with a cleaned-up stack trace.
+    /// Returns a string containing the messages of the provided exception and all inner exceptions,
+    /// along with a cleaned-up stack trace.
     /// </summary>
-    /// <param name="ex"></param>
-    /// <param name="webRoot"></param>
-    /// <returns></returns>
+    /// <param name="ex">The exception to process.</param>
+    /// <param name="webRoot">The web root path to remove from the stack trace.</param>
+    /// <returns>A string containing the full exception message and cleaned-up stack trace.</returns>
     public static string GetFullExceptionMessage(Exception ex, string webRoot)
     {
         string message = "1. " + ex.Message + Environment.NewLine;          // Start With The Main Exception Message
@@ -695,15 +675,27 @@ public static class StringUtilities
     }
 
     /// <summary>
-    /// Removes or replaces characters that are problematic in CSV format, including newlines and commas, with spaces.
+    /// Returns the maximum value between two inputs of any comparable type.
     /// </summary>
-    /// <param name="input">The string to sanitize for CSV format.</param>
-    /// <returns>A string with newline characters and commas replaced by spaces.</returns>
-    public static string StripCharsForCsv(string input)
-    {
-        return input.Replace("\r\n", " ", StringComparison.OrdinalIgnoreCase)       // Replace Windows-style newlines with space
-            .Replace("\n", " ", StringComparison.OrdinalIgnoreCase)                 // Replace Unix-style newlines with space
-            .Replace("\r", " ", StringComparison.OrdinalIgnoreCase)                 // Replace old Mac-style newlines with space
-            .Replace(",", " ", StringComparison.OrdinalIgnoreCase);                 // Replace commas with space to prevent CSV column issues
-    }
+    /// <typeparam name="T">The type of the inputs to compare.</typeparam>
+    /// <param name="a">The first input value.</param>
+    /// <param name="b">The second input value.</param>
+    /// <returns>The maximum value between the two inputs.</returns>
+    public static T Max<T>(T a, T b) where T : IComparable<T> => (a.CompareTo(b) > 0) ? a : b;
+
+    /// <summary>
+    /// Returns the minimum value between two inputs of any comparable type.
+    /// </summary>
+    /// <typeparam name="T">The type of the inputs to compare.</typeparam>
+    /// <param name="a">The first input value.</param>
+    /// <param name="b">The second input value.</param>
+    /// <returns>The minimum value between the two inputs.</returns>
+    public static T Min<T>(T a, T b) where T : IComparable<T> => (a.CompareTo(b) < 0) ? a : b;
+
+    /// <summary>
+    /// Removes all whitespace characters from the input string using a regular expression.
+    /// </summary>
+    /// <param name="source">The input string from which to remove whitespace.</param>
+    /// <returns>A string with all whitespace characters removed.</returns>
+    public static string RemoveWhitespace(string source) => Regex.Replace(source, @"\s", string.Empty);
 }
