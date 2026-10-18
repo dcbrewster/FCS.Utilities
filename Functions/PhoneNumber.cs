@@ -49,6 +49,8 @@ public static partial class Function
 
                 // Remove 000 Area Code?
                 if (string.Equals(phone[..5], "(000)", StringComparison.Ordinal)) phone = phone[5..];
+
+                phone = phone.Trim();
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FCS.Utilities.Models;
 
 namespace FCS.Utilities;
@@ -12,13 +13,13 @@ public static partial class Function
 	/// <param name="territory">Province/State to be marked "Selected"</param>
 	public static List<SelectListItem> ProvinceStateDropDownList(string territory = "")
 	{
-		List<SelectListItem> TerritoryList = [];									// List To Hold Territories
+		List<SelectListItem> TerritoryList = [];					// List To Hold Territories
 
 		territory = string.IsNullOrEmpty(territory) ? "" : territory.ToUpper();     // To Upper Case If Not Null
 
 		foreach(Territory t in Territories())										// Process Each territory
 		{
-			TerritoryList.Add(new SelectListItem()									// Add SelectListItem
+			TerritoryList.Add(new SelectListItem()								// Add SelectListItem
 			{
 				Value = t.ID,                                                       // Set Value
 				Text = t.Name,                                                      // Set Text
@@ -45,13 +46,6 @@ public static partial class Function
     /// <summary>
     /// Return List of Territory Objects (Provinces and States)
     /// </summary>
-    /// <returns></returns>
-    private static List<Territory> Territories()
-	{
-		List<Territory> TerritoryList = Provinces;		// Add Provinces
-
-		TerritoryList.AddRange(States);					// Add States
-
-		return TerritoryList;							// Return List
-	}
+	/// <returns>List of Territory Objects</returns>
+	private static List<Territory> Territories() => Provinces.Concat(States).ToList();
 }

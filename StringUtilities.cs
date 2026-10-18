@@ -215,7 +215,7 @@ public static class StringUtilities
     /// <summary>
     /// Return a string formatted for use in an SQL IN statement. E.g. "abc,def,ghi" becomes "'abc','def','ghi'"
     /// </summary>
-    /// <param name="StringIn"></param>
+    /// <param name="StringIn">Input string containing comma-separated values</param>
     /// <returns></returns>
     public static string ReturnValidSQLInString(string StringIn)
     {
@@ -535,7 +535,12 @@ public static class StringUtilities
     /// <returns>A string with the first occurrence of <paramref name="Find"/> replaced by <paramref name="Replace"/>.</returns>
     public static string ReplaceFirstOccurrence(string Source, string Find, string Replace, StringComparison stringComparison)
     {
+        // Return Original String If Source Or Find Is Null Or Empty
+        if(string.IsNullOrEmpty(Source) || string.IsNullOrEmpty(Find)) return Source;
+
         int Place = Source.IndexOf(Find, stringComparison);                 // Find The First Occurrence Of The String To Replace
+
+        if(Place < 0) return Source;                                        // Return Original String If Find Is Not Found
 
         return Source.Remove(Place, Find.Length).Insert(Place, Replace);    // Replace The First Occurrence Of The String To Replace
     }
@@ -550,7 +555,12 @@ public static class StringUtilities
     /// <returns>A new string with the last occurrence replaced.</returns>
     public static string ReplaceLastOccurrence(string Source, string Find, string Replace, StringComparison stringComparison)
     {
+        // Return Original String If Source Or Find Is Null Or Empty
+        if(string.IsNullOrEmpty(Source) || string.IsNullOrEmpty(Find)) return Source;
+
         int Place = Source.LastIndexOf(Find, stringComparison);             // Find The Last Occurrence Of The String To Replace
+
+        if(Place < 0) return Source;                                        // Return Original String If Find Is Not Found
 
         return Source.Remove(Place, Find.Length).Insert(Place, Replace);    // Replace The Last Occurrence Of The String To Replace
     }

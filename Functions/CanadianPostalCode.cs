@@ -19,6 +19,8 @@ public static partial class Function
 
         bool isValid = CanadianPostalCodePattern().IsMatch(postalCode); // Validate the postal code against the pattern
 
+        if(!isValid) postalCode = string.Empty;                         // 
+
         return new PostalCodeValidationResult(isValid, postalCode);     // Return the validation result along with the formatted postal code
     }
 
