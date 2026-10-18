@@ -206,10 +206,12 @@ public class CreateExcelFile
         CreateExcelDocument(list, TempFilename);
 
         byte[] rawData = File.ReadAllBytes(TempFilename);
-        MemoryStream ms = new MemoryStream(rawData);
+        MemoryStream ms = new(rawData);
 
-        FileStreamResult fr = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        fr.FileDownloadName = filename;
+        FileStreamResult fr = new(ms, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        {
+            FileDownloadName = filename
+        };
 
         File.Delete(TempFilename);      // We don't need this anymore
 
@@ -620,14 +622,14 @@ public class CreateExcelFile
     /// <summary>
     /// Replace any non-ASCII characters in the input string with an empty string, effectively removing them.
     /// </summary>
-    /// <param name="txt"></param>
+    /// <param name="txt">The input string to process.</param>
     /// <returns></returns>
     private static string ReplaceHexadecimalSymbols(string txt)
     {
         // I've often seen cases when a non-ASCII character will slip into the data you're trying to export,
         // and this will cause an invalid Excel to be created.
         // This function removes such characters.
-        string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
+        const string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
 
         return Regex.Replace(txt, r, "", RegexOptions.Compiled);
     }

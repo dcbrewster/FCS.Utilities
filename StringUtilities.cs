@@ -501,10 +501,10 @@ public static class StringUtilities
             Regex.Replace(
                 str,
                 @"(\P{Ll})(\P{Ll}\p{Ll})",
-                "$1 $2", RegexOptions.None | RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1)
+                "$1 $2", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1)
             ),
             @"(\p{Ll})(\P{Ll})",
-            "$1 $2", RegexOptions.None | RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1)
+            "$1 $2", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1)
         );
     }
 
